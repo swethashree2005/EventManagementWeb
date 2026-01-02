@@ -34,9 +34,7 @@ jobs:
           echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env
           echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env
 
-      - name: Lint (warnings ok)
-        run: pnpm lint
-        continue-on-error: true
+    
 
       - name: Build monorepo
         run: pnpm turbo build --filter=client
