@@ -139,7 +139,7 @@ export default function MyEventsPage() {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <Link
-                          href={`/events/${reg.event?.id}`}
+                          href={`/event/${reg.event?.id}`}
                           className="text-2xl font-bold text-gray-900 hover:text-blue-600"
                         >
                           {reg.event?.title}
