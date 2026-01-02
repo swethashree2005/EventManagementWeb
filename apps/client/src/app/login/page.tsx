@@ -29,7 +29,7 @@ export default function LoginPage() {
     }
 
     if (data) {
-      router.push("/events");
+      router.push("/event");
     }
     setLoading(false);
   };
