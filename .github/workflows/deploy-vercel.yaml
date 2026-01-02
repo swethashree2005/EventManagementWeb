@@ -10,28 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Install
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Create .env for Supabase
+        run: |
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env
+
       - name: Lint (warnings ok)
-        run: pnpm lint --max-warnings=20
+        run: pnpm lint
         continue-on-error: true
 
       - name: Build monorepo
         run: pnpm turbo build --filter=client
 
-      - name: Deploy Preview
+      - name: Deploy Preview (PR)
         if: github.event_name == 'pull_request'
         uses: amondnet/vercel-action@v25
         with:
@@ -41,7 +51,7 @@ jobs:
           working-directory: ./apps/client
           vercel-args: '--prebuilt'
 
-      - name: Deploy Production
+      - name: Deploy Production (main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: amondnet/vercel-action@v25
         with:
