@@ -1,10 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  turbopack: {
+    root: "../..", // Point to monorepo root
+  },
   images: {
-    domains: [
-      'your-supabase-project.supabase.co', // Replace with your Supabase project URL
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
+  // Remove the deprecated images.domains if you have it
 };
 
-module.exports = nextConfig;
+export default nextConfig;
