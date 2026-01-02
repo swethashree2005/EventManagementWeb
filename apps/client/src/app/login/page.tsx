@@ -51,7 +51,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <div>
+          <div className="text-black">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-2"
