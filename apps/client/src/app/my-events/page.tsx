@@ -220,7 +220,7 @@ export default function MyEventsPage() {
 
                     <div className="flex gap-3">
                       <Link
-                        href={`/events/${reg.event?.id}`}
+                        href={`/event/${reg.event?.id}`}
                         className="btn-secondary"
                       >
                         View Details

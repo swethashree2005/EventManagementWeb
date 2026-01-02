@@ -112,7 +112,7 @@ export default function EventDetailPage({
       <div className="max-w-4xl mx-auto px-4">
         {/* Back Button */}
         <button
-          onClick={() => router.push("/events")}
+          onClick={() => router.push("/event")}
           className="mb-6 flex items-center text-gray-600 hover:text-gray-900 transition-colors"
         >
           <svg
