@@ -1,8 +1,10 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: [
+      'your-supabase-project.supabase.co', // Replace with your Supabase project URL
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
