@@ -1,35 +1,38 @@
-name: CI Pipeline
+name: Deploy to Vercel
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
+    branches: [main]
+
+env:
+  VERCEL_ORG_ID: Bl9UoOLVZcmxijNcy0PudCfv  # Your org/user ID
+  VERCEL_PROJECT_ID: ${{ swethasundaram2005-7246}}  # Add this secret too
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          node-version: 18
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+          version: latest
+      - uses: actions/setup-node@v4
         with:
-          version: 8
-
+          node-version: 20
+          cache: pnpm
       - name: Install dependencies
-        run: |
-          cd apps/web
-          pnpm install
-
-      - name: Build app
-        run: |
-          cd apps/web
-          pnpm build
+        run: pnpm install --frozen-lockfile
+      - name: Lint & Typecheck
+        run: pnpm turbo lint type-check --filter=web...
+      - name: Build
+        run: pnpm turbo build --filter=web...
+      - name: Deploy
+        if: github.ref == 'refs/heads/main'
+        uses: vercel/action@v1
+        with:
+          vercel-token: ${{ StU6dhN922zB7vfZ387E7XSv }}  # New token here
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
