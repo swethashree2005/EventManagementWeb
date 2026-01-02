@@ -20,14 +20,15 @@ jobs:
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: ./apps/client
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy to Vercel (Preview)
         if: github.event_name == 'pull_request'
         run: |
           vercel deploy --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
-          echo "DEPLOYMENT_URL=$(cat deployment-url.txt)" >> $GITHUB_ENV
-        working-directory: ./apps/client
+          cat deployment-url.txt
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -36,11 +37,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
-          echo "DEPLOYMENT_URL=$(cat deployment-url.txt)" >> $GITHUB_ENV
-        working-directory: ./apps/client
+          cat deployment-url.txt
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Output Deployment URL
-        run: echo "Deployed to ${{ env.DEPLOYMENT_URL }}"
